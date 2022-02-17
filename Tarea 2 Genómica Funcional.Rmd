@@ -1,0 +1,146 @@
+---
+title: "Tarea2"
+author: "Nataly Gualito"
+date: "2/16/2022"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 4
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+lang: es-ES
+---
+
+
+## 1. Considera las siguientes cantidades discute y justifica qué tipo de distribución de probabilidad pueden tener las siguientes variables:
+  
+**a. El número (talla) de calzado de adultos varones en México.**
+
+Free scale- porque las tallas se concentran más entre el 26 al 29 para adultos varones y ya que la distribución está en escala, podríamos observar un hub en esas medidas
+
+**b. La distribución de habitantes en asentamientos humanos de México.**
+
+Aleatorio- podríamos sacar un promedio de acuerdo a la distribución de habitantes en asentamientos humanos de México y en base a ello, observar la distribución de cada asentamiento humano, así como los hub que habría en cada uno.
+
+**c. La velocidad promedio de los automóviles en Bernardo Quintana a las 9 de la mañana en un día laborable.**
+
+Free scale- Yo pensaría que como es una hora y pico, es decir, una hora en la que se concentra mucha gente, la velocidad promedio se mantendría constante, por lo que realmente veríamos muy pocos días con promedio rezagado. Pensando más en la eficiencia de este tipo de distribución
+
+**d. La velocidad promedio de los automóviles en Bernardo Quintana a las 3 de la mañana.**
+
+Aleatorio- Si bien, podría sacarse un promedio de la velocidad a esa hora, creo que en realidad variaría bastante, por lo que veríamos distintos clusters en la distribución, ya que no siempre coinciden los automóviles en ese horario 
+
+## 2. Supongamos que tenemos dos nodos (A,B) en una red. El nodo A y B tiene el mismo degree, pero el A tiene un coeficiente de clusterización de 1 y el nodo B un coeficiente bajo.Dibuja está situación y explica cuál sería una mejor diana si quieres eliminarlos y afectar a la red.
+
+```{r}
+library(igraph)
+KI<-random.graph.game(3,1, directed = TRUE)
+plot(KI)
+transitivity(KI)
+degree(KI)
+#Al tener el mismo degree, ambos presentarían el mismo coeficiente de clusterización
+#Por lo que ambos nodos serían buenas opciones para eliminar, de otra forma, creo que no se podría
+```
+
+## 3. Elabora un programa en R que usando funciones calcule, a partir de una matriz de adyacencia (Sólo utiliza R base para resolver este problema)
+
+**a. Si la red es dirigida o no.**
+
+```{r}
+library(igraphdata)
+data(karate)
+distancia1<-shortest.paths(karate)
+distancia1 #distancia entre los nodos más cortos
+
+p2<-graph_from_adjacency_matrix(distancia1)
+p2 #de igraph a matriz de adyacencia
+
+class(p2)#este lo checo, porque si se me queda en matrix, no podria saber si es directa o indirecta
+
+is_directed(p2)#es dirigida
+```
+
+**b. Si la red es pesada o no.**
+
+```{r}
+is_weighted(p2)
+```
+
+**c. El degree de los nodos.**
+
+```{r}
+p3<-degree(p2)
+p3
+```
+
+**d. El histograma del degree.**
+
+```{r}
+hist(p3)
+```
+
+
+## 4. A partir de la red de interacción de proteínas alojada en la librería igraphdata,que puedes llamar mediante data(yeast) elabora un programa en R (acá sí puedes usar librerías especializadas de R) que 1:
+
+**a. Calcule la distribución de conectividades y grafique esa distribución. Discute tu resultado.**
+
+
+```{r}
+data("yeast")
+
+y1<-degree_distribution(yeast)
+y1
+
+plot(y1) #Frecuencia relativa en el eje de las Y, uno también pensaría en una distribución de tipo free scale
+
+```
+
+**b. Grafique el boxplot de la distribución de conectividades y discute tu resultado.**
+
+```{r}
+boxplot(y1)
+```
+
+**d. Calcule el degree máximo de la red.**
+
+```{r}
+which.max(y1)
+```
+
+**e. Calcule el diámetro**
+
+```{r}
+diameter(yeast)
+```
+
+**h. Determine los diez nodos más importantes por al menos tres medidas de centralidad.**
+
+```{r}
+n.ec<- eigen_centrality(yeast)
+
+which.max(n.ec$vector)
+```
+
+**i. Clusterizar la red por al menos dos métodos y determinar el tamaño del clúster más grande.**
+
+```{r}
+centralization.closeness(yeast)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
